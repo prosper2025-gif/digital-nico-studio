@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>DN Studios | Premium Creative Agency – Design that Converts</title>
+  <meta name="description" content="DN Studios delivers conversion-focused design within 24-48h. Brand identity, flyers, social graphics for businesses & ministries. WhatsApp 09045217063.">
+  <!-- Google Fonts + Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* ---------- GLOBAL VARIABLES (Light + Dark) ---------- */
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f7fc;
+      --text-primary: #0a0a0a;
+      --text-secondary: #2c2c2c;
+      --text-muted: #5a5a5a;
+      --card-bg: rgba(255,255,255,0.7);
+      --border-light: rgba(0,0,0,0.05);
+      --accent: #0a66c2;
+      --accent-glow: rgba(10,102,194,0.25);
+      --header-bg: rgba(255,255,255,0.85);
+      --shadow-glass: 0 8px 32px rgba(0,0,0,0.05);
+      --hero-overlay: linear-gradient(125deg, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.55) 100%);
+    }
+    body.dark {
+      --bg-primary: #050505;
+      --bg-secondary: #0f0f14;
+      --text-primary: #f0f0f0;
+      --text-secondary: #d0d0d0;
+      --text-muted: #a0a0a0;
+      --card-bg: rgba(20,20,28,0.75);
+      --border-light: rgba(255,255,255,0.08);
+      --accent: #3b82f6;
+      --accent-glow: rgba(59,130,246,0.4);
+      --header-bg: rgba(10,10,10,0.85);
+      --shadow-glass: 0 8px 32px rgba(0,0,0,0.3);
+      --hero-overlay: linear-gradient(125deg, rgba(0,0,0,0.85), rgba(0,0,0,0.65));
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 2rem; }
+    
+    /* ---------- STICKY GLASS NAVBAR ---------- */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--header-bg);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border-light);
+      transition: 0.3s;
+    }
+    .header-flex {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+    }
+    .logo img { height: 48px; width: auto; display: block; }
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    .nav-link {
+      text-decoration: none;
+      font-weight: 500;
+      color: var(--text-primary);
+      transition: 0.2s;
+    }
+    .nav-link:hover { color: var(--accent); }
+    .hire-btn {
+      background: var(--accent);
+      color: white !important;
+      padding: 0.6rem 1.4rem;
+      border-radius: 40px;
+      font-weight: 600;
+      animation: subtlePulse 2s infinite;
+      transition: transform 0.2s;
+    }
+    .hire-btn:hover { transform: scale(1.03); background: #004e9e; }
+    @keyframes subtlePulse {
+      0% { box-shadow: 0 0 0 0 rgba(10,102,194,0.4); }
+      70% { box-shadow: 0 0 0 10px rgba(10,102,194,0); }
+      100% { box-shadow: 0 0 0 0 rgba(10,102,194,0); }
+    }
+    .theme-toggle {
+      background: var(--card-bg);
+      border: 1px solid var(--border-light);
+      border-radius: 50px;
+      width: 44px;
+      height: 44px;
+      cursor: pointer;
+      font-size: 1.3rem;
+      backdrop-filter: blur(4px);
+    }
+    .mobile-menu-btn { display: none; font-size: 1.7rem; cursor: pointer; }
+
+    /* ---------- PARALLAX HERO (split-text + floating shapes) ---------- */
+    .hero-parallax {
+      position: relative;
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      background: var(--hero-overlay), url('assets/hero_cover_main.jpg') center center / cover fixed;
+      background-attachment: fixed;
+      color: white;
+      isolation: isolate;
+      overflow: hidden;
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 750px; }
+    .split-text {
+      font-size: clamp(2.5rem, 8vw, 4.8rem);
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .split-text .word { display: inline-block; opacity: 0; animation: fadeWord 0.6s forwards; }
+    @keyframes fadeWord { 0% { opacity: 0; transform: translateY(30px); } 100% { opacity: 1; transform: translateY(0); } }
+    .floating-shape {
+      position: absolute;
+      background: rgba(255,255,255,0.08);
+      border-radius: 50%;
+      backdrop-filter: blur(5px);
+      pointer-events: none;
+      animation: float 12s infinite ease-in-out;
+    }
+    @keyframes float { 0% { transform: translateY(0px) rotate(0deg); } 50% { transform: translateY(-25px) rotate(5deg); } 100% { transform: translateY(0px) rotate(0deg); } }
+    .shape-1 { width: 180px; height: 180px; bottom: 10%; left: 5%; background: rgba(59,130,246,0.15); border-radius: 40% 60% 70% 30%; }
+    .shape-2 { width: 120px; height: 120px; top: 20%; right: 8%; background: rgba(255,215,0,0.1); border-radius: 60% 40% 30% 70%; animation-duration: 18s; }
+    .shape-3 { width: 70px; height: 70px; bottom: 20%; right: 15%; background: rgba(255,255,255,0.05); animation-duration: 10s; }
+
+    /* ---------- TRUST BAR (live stats) ---------- */
+    .trust-bar {
+      background: var(--bg-secondary);
+      padding: 2rem 0;
+      border-bottom: 1px solid var(--border-light);
+    }
+    .stats-grid {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+      gap: 2rem;
+      text-align: center;
+    }
+    .stat-item h3 { font-size: 2rem; color: var(--accent); font-weight: 800; }
+    
+    /* ---------- GLASS CARDS (Why Choose Us) ---------- */
+    .why-section { padding: 5rem 0; background: var(--bg-primary); }
+    .cards-glass {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      justify-content: center;
+      margin-top: 3rem;
+    }
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-light);
+      border-radius: 28px;
+      padding: 2rem;
+      flex: 1;
+      min-width: 240px;
+      text-align: center;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    .glass-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 35px -12px var(--accent-glow);
+      border-color: var(--accent);
+    }
+    .glass-card i { font-size: 2.5rem; color: var(--accent); margin-bottom: 1rem; }
+    .tooltip-text {
+      visibility: hidden;
+      background: var(--accent);
+      color: white;
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      white-space: nowrap;
+      opacity: 0;
+      transition: 0.2s;
+    }
+    .glass-card:hover .tooltip-text { visibility: visible; opacity: 1; bottom: -20px; }
+
+    /* services grid */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.8rem;
+      margin: 3rem 0;
+    }
+    .service-item {
+      background: var(--card-bg);
+      padding: 1.2rem;
+      border-radius: 20px;
+      text-align: center;
+      border: 1px solid var(--border-light);
+    }
+
+    /* portfolio preview (staggered) */
+    .portfolio-preview {
+      padding: 4rem 0;
+      background: var(--bg-secondary);
+    }
+    .preview-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+    }
+    .preview-card {
+      border-radius: 24px;
+      overflow: hidden;
+      transition: 0.3s;
+      box-shadow: var(--shadow-glass);
+    }
+    .preview-card img { width: 100%; height: 260px; object-fit: cover; transition: transform 0.5s; }
+    .preview-card:hover img { transform: scale(1.05); }
+    
+    /* CTA section */
+    .cta-section {
+      background: var(--accent);
+      color: white;
+      padding: 4rem 0;
+      text-align: center;
+    }
+    .cta-btn {
+      background: white;
+      color: var(--accent);
+      padding: 1rem 2.5rem;
+      border-radius: 60px;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    /* reveal animations */
+    .reveal {
+      opacity: 0;
+      transform: translateY(35px);
+      transition: opacity 0.7s cubic-bezier(0.2, 0.9, 0.4, 1.1), transform 0.7s ease;
+    }
+    .reveal.revealed { opacity: 1; transform: translateY(0); }
+    .stagger-item { transition-delay: 0s; }
+
+    /* footer */
+    .site-footer {
+      background: var(--bg-primary);
+      border-top: 1px solid var(--border-light);
+      padding: 2rem 0;
+      text-align: center;
+    }
+    @media (max-width: 768px) {
+      .nav-links {
+        position: fixed;
+        top: 70px;
+        left: -100%;
+        width: 100%;
+        background: var(--header-bg);
+        backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 2rem;
+        transition: left 0.3s;
+      }
+      .nav-links.show-nav { left: 0; }
+      .mobile-menu-btn { display: block; }
+      .hero-parallax { background-attachment: scroll; }
+    }
+  </style>
+</head>
+<!-- Popup AI Chat Widget for DN Studios -->
+<style>
+  /* ───── CHAT WIDGET STYLES ───────────────────────────────── */
+  .dn-chat-widget * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .dn-chat-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999999;
+    font-family: 'Segoe UI', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  
+  /* Chat Bubble Button */
+  .dn-chat-bubble {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #c8a96e 0%, #7c5cfc 100%);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(200,169,110,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    position: relative;
+  }
+  
+  .dn-chat-bubble:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 32px rgba(200,169,110,0.5);
+  }
+  
+  .dn-chat-bubble svg {
+    width: 28px;
+    height: 28px;
+  }
+  
+  /* Pulse Ring */
+  .dn-pulse-ring {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(200,169,110,0.5);
+    animation: dnPulse 2s ease-out infinite;
+    pointer-events: none;
+  }
+  
+  @keyframes dnPulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    70% { transform: scale(1.4); opacity: 0; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+  
+  /* Notification Dot */
+  .dn-notif-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background: #ff4757;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    animation: dnBlink 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes dnBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  
+  /* Chat Window */
+  .dn-chat-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    height: 520px;
+    background: rgba(15, 15, 25, 0.92);
+    backdrop-filter: blur(24px);
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+  }
+  
+  .dn-chat-window.dn-open {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1) translateY(0);
+    pointer-events: all;
+  }
+  
+  /* Light mode support */
+  @media (prefers-color-scheme: light) {
+    .dn-chat-window {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(24px);
+      border-color: rgba(0,0,0,0.1);
+    }
+  }
+  
+  /* Header */
+  .dn-chat-header {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(200,169,110,0.15) 0%, rgba(124,92,252,0.1) 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .dn-header-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #c8a96e, #7c5cfc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    color: #0a0a0f;
+  }
+  
+  .dn-header-info {
+    flex: 1;
+  }
+  
+  .dn-header-name {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.3px;
+  }
+  
+  .dn-header-status {
+    font-size: 11px;
+    opacity: 0.65;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+  }
+  
+  .dn-status-dot {
+    width: 8px;
+    height: 8px;
+    background: #2ed573;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #2ed573;
+    animation: dnTypingBlink 2s ease-in-out infinite;
+  }
+  
+  @keyframes dnTypingBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  
+  .dn-close-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: inherit;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  
+  .dn-close-btn:hover {
+    background: rgba(255,255,255,0.2);
+  }
+  
+  /* Messages Area */
+  .dn-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+  }
+  
+  .dn-messages::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .dn-messages::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .dn-messages::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+  }
+  
+  /* Message Bubbles */
+  .dn-msg {
+    display: flex;
+    gap: 8px;
+    animation: dnMsgIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  @keyframes dnMsgIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .dn-msg.dn-user {
+    flex-direction: row-reverse;
+  }
+  
+  .dn-msg-avatar {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #c8a96e, #7c5cfc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  
+  .dn-msg.dn-user .dn-msg-avatar {
+    background: rgba(200,169,110,0.2);
+    border: 1px solid rgba(200,169,110,0.3);
+    color: #c8a96e;
+  }
+  
+  .dn-msg-bubble {
+    max-width: 78%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 13px;
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+  
+  .dn-msg.dn-bot .dn-msg-bubble {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom-left-radius: 4px;
+  }
+  
+  .dn-msg.dn-user .dn-msg-bubble {
+    background: linear-gradient(135deg, rgba(200,169,110,0.25), rgba(124,92,252,0.2));
+    border-bottom-right-radius: 4px;
+    text-align: right;
+  }
+  
+  @media (prefers-color-scheme: light) {
+    .dn-msg.dn-bot .dn-msg-bubble {
+      background: rgba(0,0,0,0.04);
+      border-color: rgba(0,0,0,0.06);
+    }
+    .dn-msg.dn-user .dn-msg-bubble {
+      background: linear-gradient(135deg, rgba(200,169,110,0.2), rgba(124,92,252,0.15));
+    }
+  }
+  
+  /* Quick Chips */
+  .dn-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  .dn-chip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .dn-chip:hover {
+    background: rgba(200,169,110,0.2);
+    border-color: #c8a96e;
+    transform: translateY(-1px);
+  }
+  
+  @media (prefers-color-scheme: light) {
+    .dn-chip {
+      background: rgba(0,0,0,0.04);
+      border-color: rgba(0,0,0,0.1);
+    }
+  }
+  
+  /* Typing Indicator */
+  .dn-typing {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+  }
+  
+  .dn-typing span {
+    width: 6px;
+    height: 6px;
+    background: #c8a96e;
+    border-radius: 50%;
+    animation: dnTypingDot 1.2s ease-in-out infinite;
+  }
+  
+  .dn-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .dn-typing span:nth-child(3) { animation-delay: 0.4s; }
+  
+  @keyframes dnTypingDot {
+    0%, 60%, 100% { transform: scale(1); opacity: 0.5; }
+    30% { transform: scale(1.3); opacity: 1; }
+  }
+  
+  /* Input Area */
+  .dn-input-area {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  
+  .dn-input-area textarea {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    color: inherit;
+    resize: none;
+    outline: none;
+    max-height: 80px;
+    line-height: 1.4;
+  }
+  
+  .dn-input-area textarea::placeholder {
+    opacity: 0.5;
+  }
+  
+  .dn-input-area textarea:focus {
+    border-color: #c8a96e;
+  }
+  
+  .dn-send-btn {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, #c8a96e, #a07c45);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+  }
+  
+  .dn-send-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 12px rgba(200,169,110,0.4);
+  }
+  
+  .dn-send-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: #0a0a0f;
+  }
+  
+  /* WhatsApp Link inside messages */
+  .dn-wa-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    padding: 6px 14px;
+    border-radius: 100px;
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+    transition: transform 0.2s;
+  }
+  
+  .dn-wa-link:hover {
+    transform: translateY(-1px);
+  }
+  
+  /* Powered By */
+  .dn-powered {
+    text-align: center;
+    font-size: 9px;
+    padding: 8px;
+    opacity: 0.4;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+</style>
+
+<div class="dn-chat-widget">
+  <!-- Chat Bubble -->
+  <button class="dn-chat-bubble" id="dnChatBubble">
+    <div class="dn-pulse-ring"></div>
+    <div class="dn-notif-dot" id="dnNotifDot"></div>
+    <svg viewBox="0 0 40 40" fill="none">
+      <text x="8" y="28" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="white">DN</text>
+    </svg>
+  </button>
+  
+  <!-- Chat Window -->
+  <div class="dn-chat-window" id="dnChatWindow">
+    <div class="dn-chat-header">
+      <div class="dn-header-avatar">DN</div>
+      <div class="dn-header-info">
+        <div class="dn-header-name">DN Studios Assistant</div>
+        <div class="dn-header-status">
+          <div class="dn-status-dot"></div>
+          Online · 24/7
+        </div>
+      </div>
+      <button class="dn-close-btn" id="dnCloseChat">✕</button>
+    </div>
+    
+    <div class="dn-messages" id="dnMessages"></div>
+    
+    <div class="dn-input-area">
+      <textarea id="dnChatInput" placeholder="Ask me anything..." rows="1"></textarea>
+      <button class="dn-send-btn" id="dnSendBtn">
+        <svg viewBox="0 0 24 24">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="dn-powered">DN Studios · AI Assistant</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // Configuration
+    const WHATSAPP_NUMBER = '2349045217063';
+    const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+    
+    // DOM Elements
+    const bubble = document.getElementById('dnChatBubble');
+    const windowEl = document.getElementById('dnChatWindow');
+    const closeBtn = document.getElementById('dnCloseChat');
+    const messagesEl = document.getElementById('dnMessages');
+    const inputEl = document.getElementById('dnChatInput');
+    const sendBtn = document.getElementById('dnSendBtn');
+    const notifDot = document.getElementById('dnNotifDot');
+    
+    let isOpen = false;
+    let welcomed = false;
+    
+    // ───── HELPER FUNCTIONS ─────────────────────────────────────
+    function scrollToBottom() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function addMessage(content, isUser = false, chips = null) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `dn-msg ${isUser ? 'dn-user' : 'dn-bot'}`;
+      
+      const avatar = document.createElement('div');
+      avatar.className = 'dn-msg-avatar';
+      avatar.textContent = isUser ? 'You' : 'DN';
+      
+      const bubbleDiv = document.createElement('div');
+      bubbleDiv.className = 'dn-msg-bubble';
+      bubbleDiv.innerHTML = content;
+      
+      if (chips && chips.length) {
+        const chipsDiv = document.createElement('div');
+        chipsDiv.className = 'dn-chips';
+        chips.forEach(chip => {
+          const chipBtn = document.createElement('button');
+          chipBtn.className = 'dn-chip';
+          chipBtn.textContent = chip;
+          chipBtn.onclick = () => {
+            addMessage(chip, true);
+            const response = getBotResponse(chip);
+            showTyping(() => addMessage(response, false, getChipsForResponse(chip)));
+          };
+          chipsDiv.appendChild(chipBtn);
+        });
+        bubbleDiv.appendChild(chipsDiv);
+      }
+      
+      msgDiv.appendChild(avatar);
+      msgDiv.appendChild(bubbleDiv);
+      messagesEl.appendChild(msgDiv);
+      scrollToBottom();
+    }
+    
+    function showTyping(callback) {
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'dn-msg dn-bot';
+      typingDiv.innerHTML = `
+        <div class="dn-msg-avatar">DN</div>
+        <div class="dn-msg-bubble">
+          <div class="dn-typing"><span></span><span></span><span></span></div>
+        </div>
+      `;
+      messagesEl.appendChild(typingDiv);
+      scrollToBottom();
+      
+      setTimeout(() => {
+        typingDiv.remove();
+        callback();
+      }, 800);
+    }
+    
+    // ───── KNOWLEDGE BASE / RESPONSE ENGINE ─────────────────────
+    function getChipsForResponse(message) {
+      const lower = message.toLowerCase();
+      if (lower.includes('service') || lower.includes('offer')) return null;
+      if (lower.includes('price') || lower.includes('cost')) return null;
+      return ['Our Services', 'Turnaround Time', 'Contact Info', 'Get Quote'];
+    }
+    
+    function getBotResponse(message) {
+      const lower = message.toLowerCase();
+      
+      // Pricing / Quote
+      if (lower.match(/\b(price|cost|quote|how much|fee|charge|rate|budget|afford)\b/i)) {
+        return `Every brand is unique — so every design is custom-tailored to deliver the best value for your vision. 🎨<br><br>
+        <strong>Nicodemus</strong> will walk you through everything personally and give you a quote based on your specific needs.<br><br>
+        <a href="${WHATSAPP_URL}?text=Hi%20Nicodemus%2C%20I%27d%20like%20a%20custom%20quote%20for%20my%20project" class="dn-wa-link" target="_blank">
+          💬 Chat on WhatsApp for Quote
+        </a><br><br>
+        Our 24–48 hour turnaround starts the moment you connect! ⚡`;
+      }
+      
+      // Turnaround / Delivery
+      if (lower.match(/\b(how long|turnaround|delivery|deliver|when.*ready|time.*take|fast|rush|urgent|deadline)\b/i)) {
+        return `⚡ <strong>Fastest in the industry!</strong><br><br>
+        We operate on a strict <strong>24–48 hour turnaround</strong> for most projects — logos, flyers, brand identity work, social graphics.<br><br>
+        <strong>The process:</strong><br>
+        1️⃣ You share your brief & brand details<br>
+        2️⃣ Our team gets to work immediately<br>
+        3️⃣ Your design lands in your inbox within 24–48 hours<br><br>
+        Complex brand packages may take slightly longer — we'll give you a clear timeline upfront.<br><br>
+        <a href="${WHATSAPP_URL}?text=Hi%20Nicodemus%2C%20I%27d%20like%20to%20start%20a%20project" class="dn-wa-link" target="_blank">
+          🚀 Start Your Project Now
+        </a>`;
+      }
+      
+      // Services
+      if (lower.match(/\b(service|offer|what.*do|logo|flyer|brand|identity|poster|social media|banner|church|ministry)\b/i)) {
+        return `✨ <strong>DN Studios Services:</strong><br><br>
+        🎯 <strong>Logo & Brand Identity</strong> — Distinctive marks that represent your vision<br>
+        ⛪ <strong>Church & Ministry Flyers</strong> — Anointed designs for events & programmes<br>
+        📱 <strong>Social Media Graphics</strong> — Scroll-stopping posts & story templates<br>
+        🖼️ <strong>Event Posters & Banners</strong> — High-impact print & digital materials<br>
+        📋 <strong>Product Advertisement Design</strong> — Mockups built to convert<br>
+        🎨 <strong>Custom Design Consultation</strong> — Tailored to your brand voice<br><br>
+        Every project is <strong>custom-built from scratch</strong> — no templates!<br><br>
+        Which service interests you most?`;
+      }
+      
+      // Contact / WhatsApp
+      if (lower.match(/\b(contact|reach|whatsapp|nicodemus|phone|call|message|get in touch|talk|human)\b/i)) {
+        return `📞 <strong>Connect with Nicodemus directly:</strong><br><br>
+        <a href="${WHATSAPP_URL}" class="dn-wa-link" target="_blank">
+          💬 WhatsApp: 09045217063
+        </a><br><br>
+        📧 Email: <strong>nicodemusemmanuel305@gmail.com</strong><br>
+        🐦 X (Twitter): <strong>@digital_nico25</strong><br>
+        📱 Direct Call: <strong>08065919383</strong><br><br>
+        Nicodemus replies typically within minutes, Mon–Sat. 🙌`;
+      }
+      
+      // About / Who
+      if (lower.match(/\b(who are you|about|what is dn|studio|mission|founder)\b/i)) {
+        return `🎬 <strong>DN Studios</strong> is a premium creative design studio founded by <strong>Nicodemus Emmanuel</strong>, a graphic designer and visual brand strategist.<br><br>
+        <strong>Our mission:</strong> Help businesses, brands, and individuals show up powerfully through visual design.<br><br>
+        <strong>What makes us different:</strong><br>
+        ✦ Custom, never cookie-cutter designs<br>
+        ✦ Guaranteed 24–48 hour delivery<br>
+        ✦ Unlimited revisions until you're 100% satisfied<br>
+        ✦ Deep understanding of Nigerian & African brand contexts<br><br>
+        Ready to show up powerfully? Let's create something extraordinary! ✨`;
+      }
+      
+      // Greeting
+      if (lower.match(/^(hi|hello|hey|good morning|good afternoon|hey there|sup|howdy)/i)) {
+        return `Hey there! 👋 Great to meet you!<br><br>
+        I'm the <strong>DN Studios AI Assistant</strong> — here to help you find the perfect creative solution for your brand.<br><br>
+        <strong>You can ask me about:</strong>`;
+      }
+      
+      // Thanks
+      if (lower.match(/thank|appreciate|helpful|great help/i)) {
+        return `You're so welcome! 😊 It's our absolute pleasure.<br><br>
+        Remember — whenever you're ready to start your project, Nicodemus is just one message away. We can't wait to bring your brand vision to life! ✨<br><br>
+        <a href="${WHATSAPP_URL}?text=Hi%20Nicodemus%2C%20I%27m%20ready%20to%20start%20my%20project" class="dn-wa-link" target="_blank">
+          🎨 Start Your Project →
+        </a>`;
+      }
+      
+      // Fallback
+      return `That's a great question! For the most accurate answer, it's best to speak with <strong>Nicodemus</strong> directly — he'll give you everything you need. 🙌<br><br>
+      <a href="${WHATSAPP_URL}?text=Hi%20Nicodemus%2C%20I%20have%20a%20question%20about%20DN%20Studios" class="dn-wa-link" target="_blank">
+        💬 Ask Nicodemus on WhatsApp
+      </a><br><br>
+      Or ask me about our <strong>services</strong>, <strong>turnaround time</strong>, or <strong>pricing</strong>! 😊`;
+    }
+    
+    function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      
+      addMessage(escapeHtml(text), true);
+      inputEl.value = '';
+      inputEl.style.height = 'auto';
+      
+      showTyping(() => {
+        const reply = getBotResponse(text);
+        addMessage(reply, false, getChipsForResponse(text));
+      });
+    }
+    
+    function showWelcome() {
+      showTyping(() => {
+        addMessage(`Hi! I'm the <strong>DN Studios Assistant</strong>. 👋<br><br>How can I help you <strong>show up powerfully</strong> today?`, false, [
+          'Our Services', 'Turnaround Time', 'Get a Quote', 'Contact Info'
+        ]);
+      });
+    }
+    
+    // Auto-resize textarea
+    function autoResize() {
+      inputEl.style.height = 'auto';
+      inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px';
+    }
+    
+    // Toggle chat window
+    function toggleChat() {
+      isOpen = !isOpen;
+      if (isOpen) {
+        windowEl.classList.add('dn-open');
+        notifDot.style.opacity = '0';
+        setTimeout(() => inputEl.focus(), 200);
+        if (!welcomed) {
+          welcomed = true;
+          setTimeout(showWelcome, 300);
+        }
+      } else {
+        windowEl.classList.remove('dn-open');
+      }
+    }
+    
+    // ───── EVENT LISTENERS ─────────────────────────────────────
+    bubble.addEventListener('click', toggleChat);
+    closeBtn.addEventListener('click', toggleChat);
+    sendBtn.addEventListener('click', sendMessage);
+    
+    inputEl.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+    
+    inputEl.addEventListener('input', autoResize);
+    
+    // Hide notification dot when window is open
+    notifDot.style.opacity = '1';
+  })();
+</script>
+<body>
+  <header class="site-header">
+    <div class="header-flex container">
+      <div class="logo"><a href="index.html"><img src="assets/logo_main.png" alt="DN Studios Logo"></a></div>
+      <nav>
+        <ul class="nav-links" id="navLinks">
+          <li><a href="index.html" class="nav-link">Home</a></li>
+          <li><a href="index.html#services" class="nav-link">Services</a></li>
+          <li><a href="portfolio.html" class="nav-link">Portfolio</a></li>
+          
+          <li><a href="contact.html" class="nav-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="header-right">
+        <button class="theme-toggle" id="darkModeToggle"><img src="assets/icon_moon.svg" alt="Dark Mode"></button>
+        <a href="https://wa.me/2349045217063" class="nav-link hire-btn" target="_blank">Hire Us</a>
+        <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Section (parallax + split-text + floating shapes) -->
+    <section id="home" class="hero-parallax">
+      <div class="floating-shape shape-1"></div>
+      <div class="floating-shape shape-2"></div>
+      <div class="floating-shape shape-3"></div>
+      <div class="container hero-content">
+        <div class="hero-badge" style="background: rgba(255,255,255,0.2); display: inline-block; padding: 0.3rem 1rem; border-radius: 40px;">Founded by Nicodemus Emmanuel</div>
+        <div class="split-text" id="splitHeadline"></div>
+        <p style="font-size: 1.2rem; margin: 1.5rem 0;">Designs built to help businesses, brands, and individuals show up powerfully through visual design.</p>
+        <div class="hero-buttons" style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="portfolio.html" class="btn btn-primary" style="background: var(--accent); padding: 0.8rem 2rem; border-radius: 40px; color:white; text-decoration:none;">Explore Portfolio</a>
+          <a href="https://wa.me/2349045217063" class="btn btn-outline" style="border:2px solid white; padding:0.8rem 2rem; border-radius:40px; color:white; text-decoration:none;">WhatsApp Now</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Bar: Live Stats -->
+    <div class="trust-bar reveal">
+      <div class="container stats-grid">
+        <div class="stat-item"><h3 id="projectsCount">500+</h3><p>Projects Delivered</p></div>
+        <div class="stat-item"><h3>100%</h3><p>Custom Designs</p></div>
+        <div class="stat-item"><h3>24hr</h3><p>Average Delivery</p></div>
+      </div>
+    </div>
+
+    <!-- Why Choose Us (Glassmorphic cards) -->
+    <section id="why" class="why-section">
+      <div class="container">
+        <div class="reveal" style="text-align: center;"><span class="section-tag" style="color:var(--accent);">Why Clients Love DN</span><h2>Speed. Strategy. Soul.</h2></div>
+        <div class="cards-glass">
+          <div class="glass-card reveal stagger-item"><i class="fas fa-bolt"></i><h3>Fast Turnaround</h3><p>24–48 hours delivery without cutting corners.</p><div class="tooltip-text">Rush projects welcome</div></div>
+          <div class="glass-card reveal stagger-item"><i class="fas fa-chart-line"></i><h3>Conversion-Focused</h3><p>Design that drives engagement & sales.</p><div class="tooltip-text">Data-driven aesthetics</div></div>
+          <div class="glass-card reveal stagger-item"><i class="fas fa-magic"></i><h3>Custom/Tailored</h3><p>Every visual is uniquely yours.</p><div class="tooltip-text">Zero templates</div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Services Grid (6 items) -->
+    <section id="services" class="why-section" style="background: var(--bg-secondary);">
+      <div class="container">
+        <div class="reveal" style="text-align: center;"><span class="section-tag">Our Expertise</span><h2>What we deliver</h2></div>
+        <div class="services-grid">
+          <div class="service-item reveal"><i class="fas fa-pen-fancy"></i><h3>Flyer & Poster</h3></div>
+          <div class="service-item reveal"><i class="fas fa-trademark"></i><h3>Logo & Identity</h3></div>
+          <div class="service-item reveal"><i class="fas fa-hashtag"></i><h3>Social Media Graphics</h3></div>
+          <div class="service-item reveal"><i class="fas fa-ad"></i><h3>Product Ads</h3></div>
+          <div class="service-item reveal"><i class="fas fa-calendar-alt"></i><h3>Event/Ministry Flyers</h3></div>
+          <div class="service-item reveal"><i class="fas fa-church"></i><h3>Church Branding</h3></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Portfolio Preview (Staggered load) -->
+    <section id="portfolio" class="portfolio-preview">
+      <div class="container">
+        <div class="reveal" style="text-align: center;"><span class="section-tag">Featured Work</span><h2>Recent creative samples</h2></div>
+        <div class="preview-grid" id="previewGrid">
+          <div class="preview-card stagger-load"><img src="assets/samples_food_commercial1.jpg" alt="Food Commercial"><div class="card-caption">Food Commercials</div></div>
+          <div class="preview-card stagger-load"><img src="assets/samples_church_poster1.jpg" alt="Church Ministry"><div class="card-caption">Church/Ministry</div></div>
+          <div class="preview-card stagger-load"><img src="assets/samples_party_event1.jpg" alt="Party Events"><div class="card-caption">Party/Events</div></div>
+          <div class="preview-card stagger-load"><img src="assets/samples_brand_identity1.jpg" alt="Brand Identity"><div class="card-caption">Brand Identity</div></div>
+        </div>
+        <div style="text-align: center; margin-top: 2rem;"><a href="portfolio.html" class="btn-primary" style="background: var(--accent); padding: 0.7rem 2rem; border-radius: 30px; text-decoration: none; color: white;">View full gallery →</a></div>
+      </div>
+    </section>
+
+    <!-- CTA + WhatsApp link -->
+    <section id="contact" class="cta-section reveal">
+      <div class="container">
+        <h2>Ready to elevate your brand?</h2>
+        <p style="margin: 1rem 0;">Let's create design that actually works. 24h turnaround, conversion-focused.</p>
+        <a href="https://wa.me/2349045217063?text=Hello%20DN%20Studios,%20I%20need%20professional%20design" class="cta-btn" target="_blank"><i class="fab fa-whatsapp fa-lg"></i> Start a Project on WhatsApp</a>
+        <p style="margin-top: 1.5rem;">📧 nicodemusemmanuel305@gmail.com | 🐦 @digital_nico25</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container"><p>© 2025 DN Studios — Design by Nicodemus Emmanuel | Designs that actually work for your business</p></div>
+    <div class="container"><p>© 2026 Prosper Technologies | 09034388861</p></div>
+  </footer>
+
+  <script>
+    (function() {
+      // Dark mode
+      const toggle = document.getElementById('darkModeToggle');
+      const body = document.body;
+      const loadTheme = () => {
+        const saved = localStorage.getItem('dn_theme');
+        if (saved === 'dark') { body.classList.add('dark'); toggle.innerHTML = '<i class="fas fa-sun"></i>'; }
+        else { body.classList.remove('dark'); toggle.innerHTML = '<i class="fas fa-moon"></i>'; }
+      };
+      if (toggle) {
+        toggle.addEventListener('click', () => {
+          if (body.classList.contains('dark')) {
+            body.classList.remove('dark');
+            localStorage.setItem('dn_theme', 'light');
+            toggle.innerHTML = '<i class="fas fa-moon"></i>';
+          } else {
+            body.classList.add('dark');
+            localStorage.setItem('dn_theme', 'dark');
+            toggle.innerHTML = '<i class="fas fa-sun"></i>';
+          }
+        });
+      }
+      loadTheme();
+
+      // Split-text animation for headline
+      const headline = "Creative Design Solutions";
+      const container = document.getElementById('splitHeadline');
+      if (container) {
+        const words = headline.split(' ');
+        container.innerHTML = words.map(word => `<span class="word" style="animation-delay: ${words.indexOf(word) * 0.15}s">${word}</span>`).join(' ');
+      }
+
+      // Intersection Observer for reveal + staggered portfolio load
+      const reveals = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('revealed');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.15 });
+      reveals.forEach(el => observer.observe(el));
+
+      // Stagger load for preview cards: one-by-one with delay
+      const staggerCards = document.querySelectorAll('.stagger-load');
+      if (staggerCards.length) {
+        staggerCards.forEach((card, idx) => {
+          card.style.opacity = '0';
+          card.style.transform = 'translateY(25px)';
+          card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+          setTimeout(() => {
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+          }, 150 * (idx + 1));
+        });
+      }
+
+      // Mobile menu
+      const mobileBtn = document.getElementById('mobileMenuBtn');
+      const navLinks = document.getElementById('navLinks');
+      if (mobileBtn && navLinks) {
+        mobileBtn.addEventListener('click', () => navLinks.classList.toggle('show-nav'));
+        document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('show-nav')));
+      }
+
+      // smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) { e.preventDefault(); target.scrollIntoView({ behavior: 'smooth' }); if (navLinks) navLinks.classList.remove('show-nav'); }
+        });
+      });
+
+      // live stats counter (simple animation)
+      const projectsSpan = document.getElementById('projectsCount');
+      if (projectsSpan) {
+        let count = 0;
+        const target = 527;
+        const updateCounter = () => {
+          if (count < target) { count += 7; projectsSpan.innerText = count + '+'; setTimeout(updateCounter, 20); }
+          else projectsSpan.innerText = target + '+';
+        };
+        const statObserver = new IntersectionObserver((entries) => {
+          if (entries[0].isIntersecting) { updateCounter(); statObserver.disconnect(); }
+        }, { threshold: 0.5 });
+        statObserver.observe(projectsSpan);
+      }
+    })();
+  </script>
+  <style>
+    .preview-card { border-radius: 20px; overflow: hidden; background: var(--card-bg); transition: transform 0.3s; }
+    .preview-card:hover { transform: translateY(-6px); }
+    .preview-card img { width: 100%; height: 240px; object-fit: cover; }
+    .card-caption { padding: 0.8rem; text-align: center; font-weight: 500; background: var(--card-bg); backdrop-filter: blur(4px); }
+    .btn-primary, .btn-outline { font-weight: 600; transition: 0.2s; }
+    .section-tag { font-size: 0.8rem; letter-spacing: 2px; text-transform: uppercase; }
+    .stagger-load { transition: opacity 0.5s, transform 0.5s; }
+    .hero-parallax { background-attachment: fixed; }
+    @media (max-width: 1024px) { .hero-parallax { background-attachment: scroll; } }
+  </style>
+</body>
+</html>

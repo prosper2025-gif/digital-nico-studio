@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>DN Studios | Premium Design Gallery – Interactive Portfolio</title>
+  <meta name="description" content="Explore the creative portfolio of DN Studios: Food, Church, Adverts, Events and Brand Identity designs. Request similar work via WhatsApp.">
+  <!-- Google Fonts + Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* Additional gallery-specific styling (preserving global dark mode) */
+    .masonry-grid {
+      column-count: 3;
+      column-gap: 1.8rem;
+      margin-top: 2rem;
+    }
+    .grid-item {
+      break-inside: avoid;
+      margin-bottom: 1.8rem;
+      position: relative;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s;
+      cursor: pointer;
+      background: var(--card-bg);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+    }
+    .grid-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transition: transform 0.5s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+    .grid-item:hover img {
+      transform: scale(1.04);
+    }
+    .grid-item-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+      color: white;
+      padding: 1rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      font-weight: 500;
+    }
+    .grid-item:hover .grid-item-overlay {
+      opacity: 1;
+    }
+    /* filter pill style */
+    .filter-controls {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.7rem;
+      margin-bottom: 2rem;
+    }
+    .filter-btn {
+      background: transparent;
+      border: 1px solid var(--border-light);
+      padding: 0.6rem 1.6rem;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      color: var(--text-primary);
+    }
+    .filter-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: white;
+      box-shadow: 0 6px 14px var(--accent-glow);
+    }
+    .filter-btn:hover:not(.active) {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      background: var(--card-bg);
+      border-radius: 32px;
+      border: 1px dashed var(--border-light);
+    }
+    /* Lightbox (full screen) */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.92);
+      backdrop-filter: blur(12px);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      visibility: hidden;
+      opacity: 0;
+      transition: visibility 0.2s, opacity 0.3s;
+    }
+    .lightbox.active {
+      visibility: visible;
+      opacity: 1;
+    }
+    .lightbox-content {
+      max-width: 85vw;
+      max-height: 80vh;
+      background: transparent;
+      border-radius: 24px;
+      overflow: auto;
+      position: relative;
+    }
+    .lightbox-content img {
+      width: auto;
+      max-height: 70vh;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+    }
+    .lightbox-caption {
+      background: var(--card-bg);
+      backdrop-filter: blur(20px);
+      margin-top: 1rem;
+      padding: 1rem 1.8rem;
+      border-radius: 60px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+    .lightbox-caption span {
+      font-weight: 600;
+    }
+    .lightbox-caption .whatsapp-link {
+      background: #25D366;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      transition: 0.2s;
+    }
+    .close-lightbox {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+      background: rgba(0,0,0,0.5);
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    @media (max-width: 992px) {
+      .masonry-grid { column-count: 2; }
+    }
+    @media (max-width: 640px) {
+      .masonry-grid { column-count: 1; }
+    }
+    .counter-badge {
+      font-size: 0.7rem;
+      background: rgba(0,0,0,0.05);
+      border-radius: 20px;
+      padding: 0.1rem 0.5rem;
+      margin-left: 0.3rem;
+    }
+    body.dark .counter-badge { background: rgba(255,255,255,0.15); }
+  </style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-flex container">
+    <div class="logo"><a href="index.html"><img src="assets/logo_main.png" alt="DN Studios Logo"></a></div>
+    <nav>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="index.html#services" class="nav-link">Services</a></li>
+        <li><a href="portfolio.html" class="nav-link active">Portfolio</a></li>
+       
+        <li><a href="contact.html" class="nav-link">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="header-right">
+      <button class="theme-toggle" id="darkModeToggle"><img src="assets/icon_moon.svg" alt="Dark Mode"></button>
+      <a href="https://wa.me/2349045217063" class="nav-link hire-btn" target="_blank">Hire Us</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn"><i class="fas fa-bars"></i></button>
+    </div>
+  </div>
+</header>
+<!-- Popup AI Chat Widget for DN Studios -->
+<style>
+  /* ───── CHAT WIDGET STYLES ───────────────────────────────── */
+  .dn-chat-widget * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  .dn-chat-widget {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    z-index: 999999;
+    font-family: 'Segoe UI', 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  
+  /* Chat Bubble Button */
+  .dn-chat-bubble {
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #c8a96e 0%, #7c5cfc 100%);
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 24px rgba(200,169,110,0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: none;
+    position: relative;
+  }
+  
+  .dn-chat-bubble:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 32px rgba(200,169,110,0.5);
+  }
+  
+  .dn-chat-bubble svg {
+    width: 28px;
+    height: 28px;
+  }
+  
+  /* Pulse Ring */
+  .dn-pulse-ring {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    border: 2px solid rgba(200,169,110,0.5);
+    animation: dnPulse 2s ease-out infinite;
+    pointer-events: none;
+  }
+  
+  @keyframes dnPulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    70% { transform: scale(1.4); opacity: 0; }
+    100% { transform: scale(1.4); opacity: 0; }
+  }
+  
+  /* Notification Dot */
+  .dn-notif-dot {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    width: 12px;
+    height: 12px;
+    background: #ff4757;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    animation: dnBlink 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes dnBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  
+  /* Chat Window */
+  .dn-chat-window {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    height: 520px;
+    background: rgba(15, 15, 25, 0.92);
+    backdrop-filter: blur(24px);
+    border-radius: 24px;
+    border: 1px solid rgba(255,255,255,0.12);
+    box-shadow: 0 24px 48px rgba(0,0,0,0.4);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(0.9) translateY(20px);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+  }
+  
+  .dn-chat-window.dn-open {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1) translateY(0);
+    pointer-events: all;
+  }
+  
+  /* Light mode support */
+  @media (prefers-color-scheme: light) {
+    .dn-chat-window {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(24px);
+      border-color: rgba(0,0,0,0.1);
+    }
+  }
+  
+  /* Header */
+  .dn-chat-header {
+    padding: 16px 20px;
+    background: linear-gradient(135deg, rgba(200,169,110,0.15) 0%, rgba(124,92,252,0.1) 100%);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .dn-header-avatar {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, #c8a96e, #7c5cfc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    font-size: 18px;
+    color: #0a0a0f;
+  }
+  
+  .dn-header-info {
+    flex: 1;
+  }
+  
+  .dn-header-name {
+    font-weight: 700;
+    font-size: 15px;
+    letter-spacing: -0.3px;
+  }
+  
+  .dn-header-status {
+    font-size: 11px;
+    opacity: 0.65;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 2px;
+  }
+  
+  .dn-status-dot {
+    width: 8px;
+    height: 8px;
+    background: #2ed573;
+    border-radius: 50%;
+    box-shadow: 0 0 6px #2ed573;
+    animation: dnTypingBlink 2s ease-in-out infinite;
+  }
+  
+  @keyframes dnTypingBlink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  
+  .dn-close-btn {
+    background: rgba(255,255,255,0.1);
+    border: none;
+    color: inherit;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s;
+  }
+  
+  .dn-close-btn:hover {
+    background: rgba(255,255,255,0.2);
+  }
+  
+  /* Messages Area */
+  .dn-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-behavior: smooth;
+  }
+  
+  .dn-messages::-webkit-scrollbar {
+    width: 4px;
+  }
+  
+  .dn-messages::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  
+  .dn-messages::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+  }
+  
+  /* Message Bubbles */
+  .dn-msg {
+    display: flex;
+    gap: 8px;
+    animation: dnMsgIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  
+  @keyframes dnMsgIn {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .dn-msg.dn-user {
+    flex-direction: row-reverse;
+  }
+  
+  .dn-msg-avatar {
+    width: 28px;
+    height: 28px;
+    background: linear-gradient(135deg, #c8a96e, #7c5cfc);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+  
+  .dn-msg.dn-user .dn-msg-avatar {
+    background: rgba(200,169,110,0.2);
+    border: 1px solid rgba(200,169,110,0.3);
+    color: #c8a96e;
+  }
+  
+  .dn-msg-bubble {
+    max-width: 78%;
+    padding: 10px 14px;
+    border-radius: 18px;
+    font-size: 13px;
+    line-height: 1.5;
+    word-wrap: break-word;
+  }
+  
+  .dn-msg.dn-bot .dn-msg-bubble {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-bottom-left-radius: 4px;
+  }
+  
+  .dn-msg.dn-user .dn-msg-bubble {
+    background: linear-gradient(135deg, rgba(200,169,110,0.25), rgba(124,92,252,0.2));
+    border-bottom-right-radius: 4px;
+    text-align: right;
+  }
+  
+  @media (prefers-color-scheme: light) {
+    .dn-msg.dn-bot .dn-msg-bubble {
+      background: rgba(0,0,0,0.04);
+      border-color: rgba(0,0,0,0.06);
+    }
+    .dn-msg.dn-user .dn-msg-bubble {
+      background: linear-gradient(135deg, rgba(200,169,110,0.2), rgba(124,92,252,0.15));
+    }
+  }
+  
+  /* Quick Chips */
+  .dn-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 10px;
+  }
+  
+  .dn-chip {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  
+  .dn-chip:hover {
+    background: rgba(200,169,110,0.2);
+    border-color: #c8a96e;
+    transform: translateY(-1px);
+  }
+  
+  @media (prefers-color-scheme: light) {
+    .dn-chip {
+      background: rgba(0,0,0,0.04);
+      border-color: rgba(0,0,0,0.1);
+    }
+  }
+  
+  /* Typing Indicator */
+  .dn-typing {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px;
+  }
+  
+  .dn-typing span {
+    width: 6px;
+    height: 6px;
+    background: #c8a96e;
+    border-radius: 50%;
+    animation: dnTypingDot 1.2s ease-in-out infinite;
+  }
+  
+  .dn-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .dn-typing span:nth-child(3) { animation-delay: 0.4s; }
+  
+  @keyframes dnTypingDot {
+    0%, 60%, 100% { transform: scale(1); opacity: 0.5; }
+    30% { transform: scale(1.3); opacity: 1; }
+  }
+  
+  /* Input Area */
+  .dn-input-area {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+  }
+  
+  .dn-input-area textarea {
+    flex: 1;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    color: inherit;
+    resize: none;
+    outline: none;
+    max-height: 80px;
+    line-height: 1.4;
+  }
+  
+  .dn-input-area textarea::placeholder {
+    opacity: 0.5;
+  }
+  
+  .dn-input-area textarea:focus {
+    border-color: #c8a96e;
+  }
+  
+  .dn-send-btn {
+    width: 38px;
+    height: 38px;
+    background: linear-gradient(135deg, #c8a96e, #a07c45);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, box-shadow 0.2s;
+    flex-shrink: 0;
+  }
+  
+  .dn-send-btn:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 12px rgba(200,169,110,0.4);
+  }
+  
+  .dn-send-btn svg {
+    width: 16px;
+    height: 16px;
+    fill: #0a0a0f;
+  }
+  
+  /* WhatsApp Link inside messages */
+  .dn-wa-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: linear-gradient(135deg, #25d366, #128c7e);
+    padding: 6px 14px;
+    border-radius: 100px;
+    color: white;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 8px;
+    transition: transform 0.2s;
+  }
+  
+  .dn-wa-link:hover {
+    transform: translateY(-1px);
+  }
+  
+  /* Powered By */
+  .dn-powered {
+    text-align: center;
+    font-size: 9px;
+    padding: 8px;
+    opacity: 0.4;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+</style>
+
+<div class="dn-chat-widget">
+  <!-- Chat Bubble -->
+  <button class="dn-chat-bubble" id="dnChatBubble">
+    <div class="dn-pulse-ring"></div>
+    <div class="dn-notif-dot" id="dnNotifDot"></div>
+    <svg viewBox="0 0 40 40" fill="none">
+      <text x="8" y="28" font-family="Arial, sans-serif" font-size="20" font-weight="800" fill="white">DN</text>
+    </svg>
+  </button>
+  
+  <!-- Chat Window -->
+  <div class="dn-chat-window" id="dnChatWindow">
+    <div class="dn-chat-header">
+      <div class="dn-header-avatar">DN</div>
+      <div class="dn-header-info">
+        <div class="dn-header-name">DN Studios Assistant</div>
+        <div class="dn-header-status">
+          <div class="dn-status-dot"></div>
+          Online · 24/7
+        </div>
+      </div>
+      <button class="dn-close-btn" id="dnCloseChat">✕</button>
+    </div>
+    
+    <div class="dn-messages" id="dnMessages"></div>
+    
+    <div class="dn-input-area">
+      <textarea id="dnChatInput" placeholder="Ask me anything..." rows="1"></textarea>
+      <button class="dn-send-btn" id="dnSendBtn">
+        <svg viewBox="0 0 24 24">
+          <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+        </svg>
+      </button>
+    </div>
+    <div class="dn-powered">DN Studios · AI Assistant</div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    // Configuration
+    const WHATSAPP_NUMBER = '2349045217063';
+    const WHATSAPP_URL = `https://wa.me/${WHATSAPP_NUMBER}`;
+    
+    // DOM Elements
+    const bubble = document.getElementById('dnChatBubble');
+    const windowEl = document.getElementById('dnChatWindow');
+    const closeBtn = document.getElementById('dnCloseChat');
+    const messagesEl = document.getElementById('dnMessages');
+    const inputEl = document.getElementById('dnChatInput');
+    const sendBtn = document.getElementById('dnSendBtn');
+    const notifDot = document.getElementById('dnNotifDot');
+    
+    let isOpen = false;
+    let welcomed = false;
+    
+    // ───── HELPER FUNCTIONS ─────────────────────────────────────
+    function scrollToBottom() {
+      messagesEl.scrollTop = messagesEl.scrollHeight;
+    }
+    
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+    
+    function addMessage(content, isUser = false, chips = null) {
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `dn-msg ${isUser ? 'dn-user' : 'dn-bot'}`;
+      
+      const avatar = document.createElement('div');
+      avatar.className = 'dn-msg-avatar';
+      avatar.textContent = isUser ? 'You' : 'DN';
+      
+      const bubbleDiv = document.createElement('div');
+      bubbleDiv.className = 'dn-msg-bubble';
+      bubbleDiv.innerHTML = content;
+      
+      if (chips && chips.length) {
+        const chipsDiv = document.createElement('div');
+        chipsDiv.className = 'dn-chips';
+        chips.forEach(chip => {
+          const chipBtn = document.createElement('button');
+          chipBtn.className = 'dn-chip';
+          chipBtn.textContent = chip;
+          chipBtn.onclick = () => {
+            addMessage(chip, true);
+            const response = getBotResponse(chip);
+            showTyping(() => addMessage(response, false, getChipsForResponse(chip)));
+          };
+          chipsDiv.appendChild(chipBtn);
+        });
+        bubbleDiv.appendChild(chipsDiv);
+      }
+      
+      msgDiv.appendChild(avatar);
+      msgDiv.appendChild(bubbleDiv);
+      messagesEl.appendChild(msgDiv);
+      scrollToBottom();
+    }
+    
+    function showTyping(callback) {
+      const typingDiv = document.createElement('div');
+      typingDiv.className = 'dn-msg dn-bot';
+      typingDiv.innerHTML = `
+        <div class="dn-msg-avatar">DN</div>
+        <div class="dn-msg-bubble">
+          <div class="dn-typing"><span></span><span></span><span></span></div>
+        </div>
+      `;
+      messagesEl.appendChild(typingDiv);
+      scrollToBottom();
+      
+      setTimeout(() => {
+        typingDiv.remove();
+        callback();
+      }, 800);
+    }
+    
+    // ───── KNOWLEDGE BASE / RESPONSE ENGINE ─────────────────────
+    function getChipsForResponse(message) {
+      const lower = message.toLowerCase();
+      if (lower.includes('service') || lower.includes('offer')) return null;
+      if (lower.includes('price') || lower.includes('cost')) return null;
+      return ['Our Services', 'Turnaround Time', 'Contact Info', 'Get Quote'];
+    }
+    
+    function getBotResponse(message) {
+      const lower = message.toLowerCase();
+      
+      // Pricing / Quote
+      if (lower.match(/\b(price|cost|quote|how much|fee|charge|rate|budget|afford)\b/i)) {
+        return `Every brand is unique — so every design is custom-tailored to deliver the best value for your vision. 🎨<br><br>
+        <strong>Nicodemus</strong> will walk you through everything personally and give you a quote based on your specific needs.<br><br>
+        <a href="${WHATSAPP_URL}?text=Hi%20Nicodemus%2C%20I%27d%20like%20a%20custom%20quote%20for%20my%20project" class="dn-wa-link" target="_blank">
+          💬 Chat on WhatsApp for Quote
+        </a><br><br>
+        Our 24–48 hour turnaround starts the moment you connect! ⚡`;
+      }
+      
+      // Turnaround / Delivery
+      if (lower.match(/\b(how long|turnaround|delivery|deliver|when.*ready|time.*take|fast|rush|urgent|deadline)\b/i)) {
+        return `⚡ <strong>Fastest in the industry!</strong><br><br>
+        We operate on a strict <strong>24–48 hour turnaround</strong> for most projects — logos, flyers, brand identity work, social graphics.<br><br>
+        <strong>The process:</strong><br>
+        1️⃣ You share your brief & brand details<br>
+        2️⃣ Our team gets to work immediately<br>
+        3️⃣ Your design lands in your inbox within 24–48 hours<br><br>
+        Complex brand packages may take slightly longer — we'll give you a clear timeline upfront.<br><br>
+        <a href="${WHATSAPP_URL}?text=Hi%20Nicodemus%2C%20I%27d%20like%20to%20start%20a%20project" class="dn-wa-link" target="_blank">
+          🚀 Start Your Project Now
+        </a>`;
+      }
+      
+      // Services
+      if (lower.match(/\b(service|offer|what.*do|logo|flyer|brand|identity|poster|social media|banner|church|ministry)\b/i)) {
+        return `✨ <strong>DN Studios Services:</strong><br><br>
+        🎯 <strong>Logo & Brand Identity</strong> — Distinctive marks that represent your vision<br>
+        ⛪ <strong>Church & Ministry Flyers</strong> — Anointed designs for events & programmes<br>
+        📱 <strong>Social Media Graphics</strong> — Scroll-stopping posts & story templates<br>
+        🖼️ <strong>Event Posters & Banners</strong> — High-impact print & digital materials<br>
+        📋 <strong>Product Advertisement Design</strong> — Mockups built to convert<br>
+        🎨 <strong>Custom Design Consultation</strong> — Tailored to your brand voice<br><br>
+        Every project is <strong>custom-built from scratch</strong> — no templates!<br><br>
+        Which service interests you most?`;
+      }
+      
+      // Contact / WhatsApp
+      if (lower.match(/\b(contact|reach|whatsapp|nicodemus|phone|call|message|get in touch|talk|human)\b/i)) {
+        return `📞 <strong>Connect with Nicodemus directly:</strong><br><br>
+        <a href="${WHATSAPP_URL}" class="dn-wa-link" target="_blank">
+          💬 WhatsApp: 09045217063
+        </a><br><br>
+        📧 Email: <strong>nicodemusemmanuel305@gmail.com</strong><br>
+        🐦 X (Twitter): <strong>@digital_nico25</strong><br>
+        📱 Direct Call: <strong>08065919383</strong><br><br>
+        Nicodemus replies typically within minutes, Mon–Sat. 🙌`;
+      }
+      
+      // About / Who
+      if (lower.match(/\b(who are you|about|what is dn|studio|mission|founder)\b/i)) {
+        return `🎬 <strong>DN Studios</strong> is a premium creative design studio founded by <strong>Nicodemus Emmanuel</strong>, a graphic designer and visual brand strategist.<br><br>
+        <strong>Our mission:</strong> Help businesses, brands, and individuals show up powerfully through visual design.<br><br>
+        <strong>What makes us different:</strong><br>
+        ✦ Custom, never cookie-cutter designs<br>
+        ✦ Guaranteed 24–48 hour delivery<br>
+        ✦ Unlimited revisions until you're 100% satisfied<br>
+        ✦ Deep understanding of Nigerian & African brand contexts<br><br>
+        Ready to show up powerfully? Let's create something extraordinary! ✨`;
+      }
+      
+      // Greeting
+      if (lower.match(/^(hi|hello|hey|good morning|good afternoon|hey there|sup|howdy)/i)) {
+        return `Hey there! 👋 Great to meet you!<br><br>
+        I'm the <strong>DN Studios AI Assistant</strong> — here to help you find the perfect creative solution for your brand.<br><br>
+        <strong>You can ask me about:</strong>`;
+      }
+      
+      // Thanks
+      if (lower.match(/thank|appreciate|helpful|great help/i)) {
+        return `You're so welcome! 😊 It's our absolute pleasure.<br><br>
+        Remember — whenever you're ready to start your project, Nicodemus is just one message away. We can't wait to bring your brand vision to life! ✨<br><br>
+        <a href="${WHATSAPP_URL}?text=Hi%20Nicodemus%2C%20I%27m%20ready%20to%20start%20my%20project" class="dn-wa-link" target="_blank">
+          🎨 Start Your Project →
+        </a>`;
+      }
+      
+      // Fallback
+      return `That's a great question! For the most accurate answer, it's best to speak with <strong>Nicodemus</strong> directly — he'll give you everything you need. 🙌<br><br>
+      <a href="${WHATSAPP_URL}?text=Hi%20Nicodemus%2C%20I%20have%20a%20question%20about%20DN%20Studios" class="dn-wa-link" target="_blank">
+        💬 Ask Nicodemus on WhatsApp
+      </a><br><br>
+      Or ask me about our <strong>services</strong>, <strong>turnaround time</strong>, or <strong>pricing</strong>! 😊`;
+    }
+    
+    function sendMessage() {
+      const text = inputEl.value.trim();
+      if (!text) return;
+      
+      addMessage(escapeHtml(text), true);
+      inputEl.value = '';
+      inputEl.style.height = 'auto';
+      
+      showTyping(() => {
+        const reply = getBotResponse(text);
+        addMessage(reply, false, getChipsForResponse(text));
+      });
+    }
+    
+    function showWelcome() {
+      showTyping(() => {
+        addMessage(`Hi! I'm the <strong>DN Studios Assistant</strong>. 👋<br><br>How can I help you <strong>show up powerfully</strong> today?`, false, [
+          'Our Services', 'Turnaround Time', 'Get a Quote', 'Contact Info'
+        ]);
+      });
+    }
+    
+    // Auto-resize textarea
+    function autoResize() {
+      inputEl.style.height = 'auto';
+      inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px';
+    }
+    
+    // Toggle chat window
+    function toggleChat() {
+      isOpen = !isOpen;
+      if (isOpen) {
+        windowEl.classList.add('dn-open');
+        notifDot.style.opacity = '0';
+        setTimeout(() => inputEl.focus(), 200);
+        if (!welcomed) {
+          welcomed = true;
+          setTimeout(showWelcome, 300);
+        }
+      } else {
+        windowEl.classList.remove('dn-open');
+      }
+    }
+    
+    // ───── EVENT LISTENERS ─────────────────────────────────────
+    bubble.addEventListener('click', toggleChat);
+    closeBtn.addEventListener('click', toggleChat);
+    sendBtn.addEventListener('click', sendMessage);
+    
+    inputEl.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        sendMessage();
+      }
+    });
+    
+    inputEl.addEventListener('input', autoResize);
+    
+    // Hide notification dot when window is open
+    notifDot.style.opacity = '1';
+  })();
+</script>
+<main style="padding: 3rem 0 5rem;">
+  <div class="container">
+    <div class="section-header" style="text-align: center;">
+      <span class="section-tag">Our Creative Universe</span>
+      <h1>Design Gallery — Filter by industry</h1>
+      <p>Food, Church, Advertisements, Events & Brand Identity</p>
+    </div>
+
+    <!-- Filter Pills with counters -->
+    <div class="filter-controls" id="filterControls"></div>
+
+    <!-- Masonry Grid -->
+    <div class="masonry-grid" id="galleryGrid"></div>
+    <div id="emptyMessage" style="display: none;" class="empty-state">
+      <i class="fas fa-hourglass-half" style="font-size: 2rem; margin-bottom: 1rem;"></i>
+      <h3>More stunning work coming soon</h3>
+      <p>We're crafting exceptional designs for this category. Follow us on X for updates.</p>
+      <img src="assets/logo_main.png" alt="DN Studios" style="width: 80px; margin-top: 1rem; opacity: 0.5;">
+    </div>
+  </div>
+</main>
+
+<!-- Lightbox Modal -->
+<div id="lightboxModal" class="lightbox">
+  <div class="close-lightbox" id="closeLightboxBtn"><i class="fas fa-times"></i></div>
+  <div class="lightbox-content">
+    <img id="lightboxImage" src="" alt="Preview">
+    <div class="lightbox-caption" id="lightboxCaption"></div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>&copy; 2025 DN Studios — Design by Nicodemus Emmanuel</p>
+    <p class="footer-tagline">Designs that actually work for your business</p>
+  </div>
+  <div class="container"><p>© 2026 Prosper Technologies | 09034388861</p></div>
+</footer>
+
+<script>
+  (function() {
+    // ---------- GALLERY DATA (using naming convention) ----------
+    const galleryItems = [
+      { id: 1, category: "food", title: "Food Ad Campaign", image: "assets/samples_food_01.jpg", turnaround: "24 Hours" },
+      { id: 2, category: "church", title: "Sunday Service Flyer", image: "assets/samples_church_01.jpg", turnaround: "24 Hours" },
+      { id: 3, category: "advert", title: "Digital Billboard Ad", image: "assets/samples_advert_01.jpg", turnaround: "36 Hours" },
+      { id: 4, category: "party", title: "Luxury Birthday Invite", image: "assets/samples_party_01.jpg", turnaround: "24 Hours" },
+      { id: 5, category: "brands", title: "Complete Brand Identity", image: "assets/samples_brands_01.jpg", turnaround: "48 Hours" },
+      { id: 6, category: "food", title: "Restaurant Menu Design", image: "assets/samples_food_02.jpg", turnaround: "24 Hours" },
+      { id: 7, category: "church", title: "Conference Poster", image: "assets/samples_church_02.jpg", turnaround: "28 Hours" },
+      { id: 8, category: "advert", title: "Social Media Carousel", image: "assets/samples_advert_02.jpg", turnaround: "24 Hours" },
+      { id: 9, category: "party", title: "Wedding Invitation Suite", image: "assets/samples_party_02.jpg", turnaround: "32 Hours" },
+      { id: 10, category: "brands", title: "Ministry Logo Package", image: "assets/samples_brands_02.jpg", turnaround: "48 Hours" },
+      { id: 11, category: "food", title: "Product Packaging", image: "assets/samples_food_03.jpg", turnaround: "36 Hours" },
+      { id: 12, category: "church", title: "Annual Convention Flyer", image: "assets/samples_church_03.jpg", turnaround: "24 Hours" }
+    ];
+
+    // Category mapping for display
+    const categoryMap = {
+      'all': 'All',
+      'food': '🍔 Food Commercials',
+      'church': '⛪ Church/Ministry',
+      'advert': '📢 Advertisements',
+      'party': '🎉 Party/Events',
+      'brands': '✨ Brand Identity'
+    };
+
+    // Count items per category
+    function getCounts() {
+      const counts = { all: galleryItems.length };
+      for (let item of galleryItems) {
+        counts[item.category] = (counts[item.category] || 0) + 1;
+      }
+      return counts;
+    }
+
+    // Render filter buttons with counters
+    const filterContainer = document.getElementById('filterControls');
+    const counts = getCounts();
+    const categories = ['all', 'food', 'church', 'advert', 'party', 'brands'];
+    
+    function renderFilters(activeCat) {
+      filterContainer.innerHTML = '';
+      categories.forEach(cat => {
+        const btn = document.createElement('button');
+        btn.className = `filter-btn ${activeCat === cat ? 'active' : ''}`;
+        btn.setAttribute('data-filter', cat);
+        const displayName = categoryMap[cat];
+        const count = counts[cat] || 0;
+        btn.innerHTML = `${displayName} <span class="counter-badge">${count}</span>`;
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          filterGallery(cat);
+        });
+        filterContainer.appendChild(btn);
+      });
+    }
+
+    // Masonry grid render / filter animation + smooth transition (reflow)
+    const galleryGrid = document.getElementById('galleryGrid');
+    let currentFilter = 'all';
+
+    function filterGallery(category) {
+      currentFilter = category;
+      const itemsToShow = category === 'all' ? galleryItems : galleryItems.filter(item => item.category === category);
+      const emptyDiv = document.getElementById('emptyMessage');
+      if (itemsToShow.length === 0) {
+        galleryGrid.style.display = 'none';
+        emptyDiv.style.display = 'block';
+        return;
+      }
+      galleryGrid.style.display = 'block';
+      emptyDiv.style.display = 'none';
+      
+      // Smooth transition: Fade out existing, rebuild, fade in
+      galleryGrid.style.opacity = '0';
+      setTimeout(() => {
+        renderMasonryItems(itemsToShow);
+        galleryGrid.style.opacity = '1';
+        // force masonry column reflow
+        if (window.masonryResize) window.dispatchEvent(new Event('resize'));
+      }, 200);
+    }
+
+    function renderMasonryItems(items) {
+      galleryGrid.innerHTML = '';
+      items.forEach((item, idx) => {
+        const gridItem = document.createElement('div');
+        gridItem.className = 'grid-item';
+        gridItem.setAttribute('data-id', item.id);
+        // dynamic image lazy loading
+        const img = document.createElement('img');
+        img.dataset.src = item.image;
+        img.alt = item.title;
+        img.classList.add('lazy-img');
+        img.style.width = '100%';
+        // placeholder background
+        img.style.background = '#e0e0e0';
+        
+        const overlay = document.createElement('div');
+        overlay.className = 'grid-item-overlay';
+        overlay.innerHTML = `<span>${item.title}</span><i class="fas fa-expand"></i>`;
+        
+        gridItem.appendChild(img);
+        gridItem.appendChild(overlay);
+        
+        // lightbox trigger
+        gridItem.addEventListener('click', (e) => {
+          e.stopPropagation();
+          openLightbox(item);
+        });
+        
+        galleryGrid.appendChild(gridItem);
+      });
+      // lazy load images using intersection observer
+      lazyLoadImages();
+    }
+
+    // Lazy loading for gallery images
+    function lazyLoadImages() {
+      const lazyImgs = document.querySelectorAll('.lazy-img');
+      const imgObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.classList.remove('lazy-img');
+            observer.unobserve(img);
+          }
+        });
+      }, { rootMargin: '200px' });
+      lazyImgs.forEach(img => imgObserver.observe(img));
+    }
+
+    // ----- LIGHTBOX LOGIC (full screen with details) -----
+    const lightbox = document.getElementById('lightboxModal');
+    const lightboxImg = document.getElementById('lightboxImage');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    let currentLightboxItem = null;
+
+    function openLightbox(item) {
+      currentLightboxItem = item;
+      lightboxImg.src = item.image;
+      const categoryPretty = categoryMap[item.category] || item.category;
+      lightboxCaption.innerHTML = `
+        <span><strong>${item.title}</strong> | ${categoryPretty}</span>
+        <span><i class="fas fa-clock"></i> Turnaround: ${item.turnaround}</span>
+        <a href="https://wa.me/2349045217063?text=Hello%20DN%20Studios!%20I%20love%20the%20design%20'${encodeURIComponent(item.title)}'%20and%20would%20like%20something%20similar.%20Please%20share%20pricing." 
+           class="whatsapp-link" target="_blank">
+           <i class="fab fa-whatsapp"></i> Request Similar Design
+        </a>
+      `;
+      lightbox.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    document.getElementById('closeLightboxBtn').addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) closeLightbox();
+    });
+
+    // Keyboard support
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('active')) closeLightbox();
+    });
+
+    // Dark mode toggle (reuse global)
+    const toggleBtn = document.getElementById('darkModeToggle');
+    const bodyEl = document.body;
+    function loadTheme() {
+      const saved = localStorage.getItem('dn_theme');
+      if (saved === 'dark') {
+        bodyEl.classList.add('dark');
+        if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+      } else {
+        bodyEl.classList.remove('dark');
+        if (toggleBtn) toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+      }
+    }
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', () => {
+        if (bodyEl.classList.contains('dark')) {
+          bodyEl.classList.remove('dark');
+          localStorage.setItem('dn_theme', 'light');
+          toggleBtn.innerHTML = '<i class="fas fa-moon"></i>';
+        } else {
+          bodyEl.classList.add('dark');
+          localStorage.setItem('dn_theme', 'dark');
+          toggleBtn.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+      });
+    }
+    loadTheme();
+
+    // mobile menu logic
+    const mobileBtn = document.getElementById('mobileMenuBtn');
+    const navLinks = document.getElementById('navLinks');
+    if (mobileBtn && navLinks) {
+      mobileBtn.addEventListener('click', () => navLinks.classList.toggle('show-nav'));
+      document.querySelectorAll('.nav-link').forEach(link => link.addEventListener('click', () => navLinks.classList.remove('show-nav')));
+    }
+
+    // initialize masonry and filters
+    renderFilters('all');
+    renderMasonryItems(galleryItems);
+    lazyLoadImages();
+
+    // ensure images already loaded after filter transition
+    window.addEventListener('resize', () => {
+      if (galleryGrid.style.display !== 'none') {
+        // refresh lazy loading on resize
+        lazyLoadImages();
+      }
+    });
+  })();
+</script>
+<style>
+  /* ensure masonry columns spacing */
+  .masonry-grid {
+    transition: opacity 0.3s ease;
+  }
+  .grid-item {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .grid-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 18px 30px -12px var(--accent-glow);
+  }
+  .lazy-img {
+    background: #2c2c2c;
+  }
+  body.dark .lazy-img {
+    background: #1a1a1a;
+  }
+  .empty-state {
+    margin: 2rem auto;
+  }
+  .section-tag {
+    color: var(--accent);
+  }
+</style>
+</body>
+</html>
